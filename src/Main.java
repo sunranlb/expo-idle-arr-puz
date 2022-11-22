@@ -29,7 +29,7 @@ public class Main {
     }};
 
     public static void main(String[] args) {
-        String ss = "1141";
+        String ss = "5212";
         int[] input = new int[4];
         for (int i = 0; i < 4; i++) {
             input[i] = ss.charAt(i) - '0';
