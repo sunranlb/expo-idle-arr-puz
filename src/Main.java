@@ -29,42 +29,52 @@ public class Main {
     }};
 
     public static void main(String[] args) {
-        String ss = "5212";
-        int[] input = new int[4];
-        for (int i = 0; i < 4; i++) {
-            input[i] = ss.charAt(i) - '0';
-        }
+        while (true) {
+            Scanner sc = new Scanner(System.in);
+            String ss = sc.next();
+            int[] input = new int[4];
+            for (int i = 0; i < 4; i++) {
+                input[i] = ss.charAt(i) - '0';
+            }
 
-        Deque<Inf> q = new ArrayDeque<>();
-        Set<Integer> his = new HashSet<>();
-        his.add(sig(input));
-        Inf inf = new Inf();
-        inf.s = input;
-        q.offer(inf);
-        while (!q.isEmpty()) {
-            Inf p = q.poll();
-            for (String s : M.keySet()) {
-                int[] m = M.get(s);
-                int[] ns = new int[4];
-                for (int i = 0; i < 4; i++) {
-                    ns[i] = (p.s[i] + m[i]) % 6;
+            Deque<Inf> q = new ArrayDeque<>();
+            Set<Integer> his = new HashSet<>();
+            his.add(sig(input));
+            Inf inf = new Inf();
+            inf.s = input;
+            q.offer(inf);
+            boolean found = false;
+            while (!q.isEmpty()) {
+                Inf p = q.poll();
+                for (String s : M.keySet()) {
+                    int[] m = M.get(s);
+                    int[] ns = new int[4];
+                    for (int i = 0; i < 4; i++) {
+                        ns[i] = (p.s[i] + m[i]) % 6;
+                    }
+                    int si = sig(ns);
+                    inf = new Inf();
+                    inf.s = ns;
+                    inf.r.addAll(p.r);
+                    inf.r.add(s);
+                    if (valid(ns)) {
+                        System.out.println(inf.r);
+                        found = true;
+                        break;
+                    }
+                    if (!his.contains(si)) {
+                        his.add(si);
+                        q.offer(inf);
+                    }
                 }
-                int si = sig(ns);
-                inf = new Inf();
-                inf.s = ns;
-                inf.r.addAll(p.r);
-                inf.r.add(s);
-                if (valid(ns)) {
-                    System.out.println(inf.r);
-                    throw new RuntimeException("E");
-                }
-                if (!his.contains(si)) {
-                    his.add(si);
-                    q.offer(inf);
+                if (found) {
+                    break;
                 }
             }
+            if (!found) {
+                System.out.println("NO RESULT!");
+            }
         }
-        System.out.println("NO RESULT!");
     }
 
     private static boolean valid(int[] a) {
